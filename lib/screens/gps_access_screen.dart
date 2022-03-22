@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class GpsAccessScreen extends StatelessWidget {
   const GpsAccessScreen({Key? key}) : super(key: key);
@@ -26,10 +24,11 @@ class _AccessButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          margin: const EdgeInsets.only(bottom: 10, left: 30, right: 30),
+          margin: const EdgeInsets.only(bottom: 15, left: 30, right: 30),
           child: const Text(
             "It is necessary to enable GPS access in order to use this app.",
             textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14),
           ),
         ),
         MaterialButton(
@@ -39,9 +38,11 @@ class _AccessButton extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           color: Colors.black,
-          shape: const StadiumBorder(),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30))),
           elevation: 0,
           splashColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
         )
       ],
     );
@@ -57,7 +58,7 @@ class _EnableGpsMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       'Enable GPS to continue.',
-      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
     );
   }
 }
