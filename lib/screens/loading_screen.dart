@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:maps_app/blocs/blocs.dart';
+import 'package:maps_app/screens/screens.dart';
+
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Hello LoadingScreen'),
+    return Scaffold(
+      body: BlocBuilder<GpsBloc, GpsState>(
+        builder: (BuildContext context, state) {
+          return state.isPermissionsAllowed
+              ? const MapScreen()
+              : const GpsAccessScreen();
+        },
       ),
     );
   }

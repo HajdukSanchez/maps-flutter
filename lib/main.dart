@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Maps App',
-      home: Scaffold(body: GpsAccessScreen()),
+      home: Scaffold(body: LoadingScreen()),
     );
   }
 }

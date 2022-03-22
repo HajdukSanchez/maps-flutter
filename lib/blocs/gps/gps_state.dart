@@ -5,6 +5,9 @@ class GpsState extends Equatable {
   final bool
       isGpsPermissionGranted; // true if GPS permission is granted, false otherwise
 
+// Help us to know if the user has the two permissions
+  bool get isPermissionsAllowed => isGpsEnabled && isGpsPermissionGranted;
+
   const GpsState(
       {required this.isGpsEnabled, required this.isGpsPermissionGranted});
 

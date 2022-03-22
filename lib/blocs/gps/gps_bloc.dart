@@ -22,11 +22,16 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
   }
 
   Future<void> _init() async {
-    final isEnable = await _checkGpsStatus();
+    // If we want to send two Futures at the same time, we need to use Future.wait
+    final List<bool> gpsInitStatu =
+        await Future.wait([_checkGpsStatus(), _isPermissionGranted()]);
     add(GpsAndPermissionEvent(
-        isGpsEnabled: isEnable,
-        isGpsPermissionGranted: state.isGpsPermissionGranted));
+        isGpsEnabled: gpsInitStatu[0],
+        isGpsPermissionGranted: gpsInitStatu[1]));
   }
+
+  Future<bool> _isPermissionGranted() async =>
+      await Permission.location.isGranted;
 
   Future<bool> _checkGpsStatus() async {
     final isEnable = await Geolocator.isLocationServiceEnabled();
