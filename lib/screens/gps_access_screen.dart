@@ -28,6 +28,11 @@ class _AccessButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void requestGPSAccess() {
+      final gpsBloc = BlocProvider.of<GpsBloc>(context);
+      gpsBloc.askGpsAccess();
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -40,7 +45,7 @@ class _AccessButton extends StatelessWidget {
           ),
         ),
         MaterialButton(
-          onPressed: () {},
+          onPressed: requestGPSAccess,
           child: const Text(
             "Request access",
             style: TextStyle(color: Colors.white, fontSize: 14),
