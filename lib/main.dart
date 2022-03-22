@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Maps App',
-      home: Scaffold(body: LoadingScreen()),
+      home: Scaffold(body: GpsAccessScreen()),
     );
   }
 }
