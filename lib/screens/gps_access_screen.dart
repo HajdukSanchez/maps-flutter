@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:maps_app/blocs/blocs.dart';
+
 class GpsAccessScreen extends StatelessWidget {
   const GpsAccessScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: _AccessButton(),
+        child: BlocBuilder<GpsBloc, GpsState>(builder: ((context, state) {
+          return !state.isGpsEnabled
+              ? const _EnableGpsMessage()
+              : const _AccessButton();
+        })),
       ),
     );
   }
@@ -26,16 +34,16 @@ class _AccessButton extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(bottom: 15, left: 30, right: 30),
           child: const Text(
-            "It is necessary to enable GPS access in order to use this app.",
+            "It is necessary to enable GPS access in order to use this app",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
           ),
         ),
         MaterialButton(
           onPressed: () {},
           child: const Text(
             "Request access",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontSize: 14),
           ),
           color: Colors.black,
           shape: const RoundedRectangleBorder(
@@ -57,7 +65,7 @@ class _EnableGpsMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(
-      'Enable GPS to continue.',
+      'Enable GPS to continue',
       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
     );
   }
