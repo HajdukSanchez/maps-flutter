@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maps_app/screens/screens.dart';
 
 void main() => runApp(const MyApp());
 
@@ -10,11 +11,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Maps App',
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      home: Scaffold(body: LoadingScreen()),
     );
   }
 }
