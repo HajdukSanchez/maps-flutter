@@ -9,6 +9,7 @@ void main() {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(create: (_) => GpsBloc()),
+      BlocProvider(create: (_) => LocationBloc()),
     ],
     child: const MyApp(),
   ));
