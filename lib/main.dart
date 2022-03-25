@@ -10,6 +10,7 @@ void main() {
     providers: [
       BlocProvider(create: (_) => GpsBloc()),
       BlocProvider(create: (_) => LocationBloc()),
+      BlocProvider(create: (_) => MapBloc()),
     ],
     child: const MyApp(),
   ));
