@@ -1,19 +1,20 @@
 part of 'map_bloc.dart';
 
 class MapState extends Equatable {
-  final bool isMapInitialized; // Para saber si ya puedo usar el mapa
-  final bool followingUser; // Para saber si estoy siguiendo al usuario
+  final bool isMapInitialized; // To know if the map is initialized
+  final bool isFollowingUser; // To know if the map is following the user
 
   const MapState({
     this.isMapInitialized = false,
-    this.followingUser = false,
+    this.isFollowingUser = false,
   });
 
-  MapState copyWith({bool? isMapInitialized, bool? followingUser}) => MapState(
+  MapState copyWith({bool? isMapInitialized, bool? isFollowingUser}) =>
+      MapState(
         isMapInitialized: isMapInitialized ?? this.isMapInitialized,
-        followingUser: followingUser ?? this.followingUser,
+        isFollowingUser: isFollowingUser ?? this.isFollowingUser,
       );
 
   @override
-  List<Object> get props => [isMapInitialized, followingUser];
+  List<Object> get props => [isMapInitialized, isFollowingUser];
 }

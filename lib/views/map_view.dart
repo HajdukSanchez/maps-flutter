@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:maps_app/blocs/blocs.dart';
 
 class MapView extends StatelessWidget {
@@ -24,14 +26,18 @@ class MapView extends StatelessWidget {
     return SizedBox(
       height: size.height,
       width: size.width,
-      child: GoogleMap(
-        initialCameraPosition: initialCameraPosition,
-        myLocationEnabled: true,
-        zoomControlsEnabled: false,
-        myLocationButtonEnabled: false,
-        onMapCreated: (GoogleMapController controller) {
-          mapBloc.add(OnMapInitializedEvent(controller));
-        },
+      child: Listener(
+        onPointerMove: (PointerMoveEvent event) =>
+            mapBloc.add(OnMapStopFollowingUserEvent()),
+        child: GoogleMap(
+          initialCameraPosition: initialCameraPosition,
+          myLocationEnabled: true,
+          zoomControlsEnabled: false,
+          myLocationButtonEnabled: false,
+          onMapCreated: (GoogleMapController controller) {
+            mapBloc.add(OnMapInitializedEvent(controller));
+          },
+        ),
       ),
     );
   }
