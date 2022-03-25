@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
+import 'package:maps_app/views/views.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -35,10 +36,14 @@ class _MapScreenState extends State<MapScreen> {
       if (state.lastKnownPosition == null) {
         return const Center(child: CircularProgressIndicator());
       }
-
-      return Center(
-        child: Text(
-            "${state.lastKnownPosition!.latitude} / ${state.lastKnownPosition!.longitude}"),
+      return SingleChildScrollView(
+        child: Stack(
+          children: [
+            MapView(
+              initialLocation: state.lastKnownPosition!,
+            )
+          ],
+        ),
       );
     }));
   }
