@@ -8,8 +8,13 @@ import 'package:maps_app/blocs/blocs.dart';
 class MapView extends StatelessWidget {
   final LatLng initialLocation;
   final double zoom;
+  final Set<Polyline> polylines;
 
-  const MapView({Key? key, required this.initialLocation, this.zoom = 15})
+  const MapView(
+      {Key? key,
+      required this.initialLocation,
+      required this.polylines,
+      this.zoom = 15})
       : super(key: key);
 
   @override
@@ -34,6 +39,7 @@ class MapView extends StatelessWidget {
           myLocationEnabled: true,
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
+          polylines: polylines,
           onMapCreated: (GoogleMapController controller) {
             mapBloc.add(OnMapInitializedEvent(controller));
           },
