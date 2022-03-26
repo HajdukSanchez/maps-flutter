@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ part 'map_state.dart';
 class MapBloc extends Bloc<MapEvent, MapState> {
   final LocationBloc locationBloc;
   GoogleMapController? _mapController;
+  StreamSubscription<LocationState>? _locationStateSubscription;
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     on<OnMapInitializedEvent>(_onInitMap); // We use methods inside the Class for organize the code
@@ -38,7 +40,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   // Here we suscribe to the location State in order to know when the user location change
   void _startTrackingUser() {
-    locationBloc.stream.listen((locationState) {
+    _locationStateSubscription = locationBloc.stream.listen((locationState) {
       if (locationState.lastKnownPosition != null) {
         // If we have last location, we have history of the user
         add(UpdateUserPolylineEvent(locationState.myLocationHistory));
@@ -71,5 +73,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _toggleShowMyRoute(ToggleShowMyRouteEvent event, Emitter<MapState> emit) {
     emit(state.copyWith(showMyRoute: !state.showMyRoute));
+  }
+
+  @override
+  Future<void> close() {
+    _locationStateSubscription?.cancel();
+    return super.close();
   }
 }
