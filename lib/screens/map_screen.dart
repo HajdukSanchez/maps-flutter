@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
+import 'package:maps_app/enums/enums.dart';
 import 'package:maps_app/views/views.dart';
 import 'package:maps_app/widgets/widgets.dart';
 
@@ -33,19 +35,24 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<LocationBloc, LocationState>(
-          builder: (BuildContext context, locationState) {
+      body:
+          BlocBuilder<LocationBloc, LocationState>(builder: (BuildContext context, locationState) {
         if (locationState.lastKnownPosition == null) {
           return const Center(child: CircularProgressIndicator());
         }
         return BlocBuilder<MapBloc, MapState>(
           builder: (context, mapState) {
+            Map<String, Polyline> polylines = Map<String, Polyline>.from(mapState.polylines);
+            if (!mapState.showMyRoute) {
+              polylines.remove(PolylineEnum.myRoute.name); // Remove the Polyline
+            }
+
             return SingleChildScrollView(
               child: Stack(
                 children: [
                   MapView(
                       initialLocation: locationState.lastKnownPosition!,
-                      polylines: mapState.polylines.values.toSet())
+                      polylines: polylines.values.toSet())
                 ],
               ),
             );
@@ -56,6 +63,7 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: const [
+          ButtonToggleUserRoute(),
           ButtonFollowUser(),
           ButtonLocation(),
         ],

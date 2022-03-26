@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
+import 'package:maps_app/enums/enums.dart';
 import 'package:maps_app/themes/themes.dart';
 
 part 'map_event.dart';
@@ -16,16 +17,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   GoogleMapController? _mapController;
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
-    on<OnMapInitializedEvent>(
-        _onInitMap); // We use methods inside the Class for organize the code
-
-    on<OnMapStartFollowingUserEvent>(_startFollowingUser);
-
+    on<OnMapInitializedEvent>(_onInitMap); // We use methods inside the Class for organize the code
     on<UpdateUserPolylineEvent>(_onPolylineNewPoint);
-
-    on<OnMapStopFollowingUserEvent>(
-        (event, emit) => emit(state.copyWith(isFollowingUser: false)));
-
+    on<ToggleShowMyRouteEvent>(_toggleShowMyRoute);
+    on<OnMapStartFollowingUserEvent>(_startFollowingUser);
+    on<OnMapStopFollowingUserEvent>((event, emit) => emit(state.copyWith(isFollowingUser: false)));
     _startTrackingUser();
   }
 
@@ -36,8 +32,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
     _mapController = event.controller;
-    _mapController!.setMapStyle(
-        jsonEncode(uberMapTheme)); // Here we set the style of the map
+    _mapController!.setMapStyle(jsonEncode(uberMapTheme)); // Here we set the style of the map
     emit(state.copyWith(isMapInitialized: true));
   }
 
@@ -54,25 +49,27 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     });
   }
 
-  void _startFollowingUser(
-      OnMapStartFollowingUserEvent event, Emitter<MapState> emit) {
-    moveCamera(locationBloc.state
-        .lastKnownPosition!); // Move camera and then start to following the user again
+  void _startFollowingUser(OnMapStartFollowingUserEvent event, Emitter<MapState> emit) {
+    moveCamera(locationBloc
+        .state.lastKnownPosition!); // Move camera and then start to following the user again
     emit(state.copyWith(isFollowingUser: true));
   }
 
-  void _onPolylineNewPoint(
-      UpdateUserPolylineEvent event, Emitter<MapState> emit) {
-    const myRoute = Polyline(
+  void _onPolylineNewPoint(UpdateUserPolylineEvent event, Emitter<MapState> emit) {
+    final myRoute = Polyline(
         width: 5,
-        polylineId: PolylineId("MyRoute"),
+        polylineId: PolylineId(PolylineEnum.myRoute.name),
         color: Colors.black,
         startCap: Cap.roundCap,
         endCap: Cap.roundCap);
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
-    currentPolylines['myRoute'] =
+    currentPolylines[PolylineEnum.myRoute.name] =
         myRoute; // We create a copy because maybe we are going to re do this event
     emit(state.copyWith(polylines: currentPolylines));
+  }
+
+  void _toggleShowMyRoute(ToggleShowMyRouteEvent event, Emitter<MapState> emit) {
+    emit(state.copyWith(showMyRoute: !state.showMyRoute));
   }
 }
