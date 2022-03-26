@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -20,10 +21,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     on<OnMapStartFollowingUserEvent>(_startFollowingUser);
 
+    on<UpdateUserPolylineEvent>(_onPolylineNewPoint);
+
     on<OnMapStopFollowingUserEvent>(
         (event, emit) => emit(state.copyWith(isFollowingUser: false)));
 
     _startTrackingUser();
+  }
+
+  void moveCamera(LatLng newLocation) {
+    final cameraUpdate = CameraUpdate.newLatLng(newLocation);
+    _mapController?.animateCamera(cameraUpdate);
   }
 
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
@@ -36,6 +44,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   // Here we suscribe to the location State in order to know when the user location change
   void _startTrackingUser() {
     locationBloc.stream.listen((locationState) {
+      if (locationState.lastKnownPosition != null) {
+        // If we have last location, we have history of the user
+        add(UpdateUserPolylineEvent(locationState.myLocationHistory));
+      }
       if (!state.isFollowingUser) return;
       if (locationState.lastKnownPosition == null) return;
       moveCamera(locationState.lastKnownPosition!);
@@ -49,8 +61,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(isFollowingUser: true));
   }
 
-  void moveCamera(LatLng newLocation) {
-    final cameraUpdate = CameraUpdate.newLatLng(newLocation);
-    _mapController?.animateCamera(cameraUpdate);
+  void _onPolylineNewPoint(
+      UpdateUserPolylineEvent event, Emitter<MapState> emit) {
+    const myRoute = Polyline(
+        width: 5,
+        polylineId: PolylineId("MyRoute"),
+        color: Colors.black,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap);
+
+    final currentPolylines = Map<String, Polyline>.from(state.polylines);
+    currentPolylines['myRoute'] =
+        myRoute; // We create a copy because maybe we are going to re do this event
+    emit(state.copyWith(polylines: currentPolylines));
   }
 }
