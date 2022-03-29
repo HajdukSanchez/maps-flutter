@@ -70,11 +70,15 @@ class _ButtonBack extends StatelessWidget {
           maxRadius: 25,
           backgroundColor: Colors.white,
           child: IconButton(
-              onPressed: () {},
+              onPressed: () => _onPressed(context),
               icon: const Icon(
                 Icons.arrow_back_rounded,
                 color: Colors.black,
               ))),
     );
+  }
+
+  void _onPressed(BuildContext context) {
+    BlocProvider.of<SearchBloc>(context).add(OnDisactivateManualMarkerEvent());
   }
 }
