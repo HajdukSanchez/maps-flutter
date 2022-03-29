@@ -30,6 +30,7 @@ dependencies:
   animate_do: ^2.1.0
   bloc: ^8.0.3
   cupertino_icons: ^1.0.2
+  dio: ^4.0.5
   equatable: ^2.0.3
   flutter:
     sdk: flutter
