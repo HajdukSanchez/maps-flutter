@@ -10,11 +10,7 @@ class MapView extends StatelessWidget {
   final double zoom;
   final Set<Polyline> polylines;
 
-  const MapView(
-      {Key? key,
-      required this.initialLocation,
-      required this.polylines,
-      this.zoom = 15})
+  const MapView({Key? key, required this.initialLocation, required this.polylines, this.zoom = 15})
       : super(key: key);
 
   @override
@@ -32,8 +28,7 @@ class MapView extends StatelessWidget {
       height: size.height,
       width: size.width,
       child: Listener(
-        onPointerMove: (PointerMoveEvent event) =>
-            mapBloc.add(OnMapStopFollowingUserEvent()),
+        onPointerMove: (PointerMoveEvent event) => mapBloc.add(OnMapStopFollowingUserEvent()),
         child: GoogleMap(
           initialCameraPosition: initialCameraPosition,
           myLocationEnabled: true,
@@ -43,6 +38,7 @@ class MapView extends StatelessWidget {
           onMapCreated: (GoogleMapController controller) {
             mapBloc.add(OnMapInitializedEvent(controller));
           },
+          onCameraMove: (position) => mapBloc.mapCenterLocation = position.target,
         ),
       ),
     );

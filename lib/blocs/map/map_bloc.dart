@@ -14,9 +14,10 @@ part 'map_event.dart';
 part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
-  final LocationBloc locationBloc;
   GoogleMapController? _mapController;
   StreamSubscription<LocationState>? _locationStateSubscription;
+  LatLng? mapCenterLocation;
+  final LocationBloc locationBloc;
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     on<OnMapInitializedEvent>(_onInitMap); // We use methods inside the Class for organize the code
