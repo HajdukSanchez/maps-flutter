@@ -1,8 +1,31 @@
 import 'package:flutter/material.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:maps_app/blocs/blocs.dart';
+import 'package:maps_app/models/models.dart';
 import 'package:maps_app/search/delegates.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) =>
+          !state.displayManualMarker ? const _SearchBarBody() : const SizedBox(),
+    );
+  }
+}
+
+class _SearchBarBody extends StatelessWidget {
+  const _SearchBarBody({Key? key}) : super(key: key);
+
+  onSearchResults(BuildContext context, SearchResult result) {
+    if (result.manual) {
+      BlocProvider.of<SearchBloc>(context).add(OnActivateManualMarkerEvent());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +38,7 @@ class SearchBar extends StatelessWidget {
             final result =
                 await showSearch(context: context, delegate: SearchDestinationDelegate());
             if (result == null) return;
-            print(result);
+            onSearchResults(context, result);
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

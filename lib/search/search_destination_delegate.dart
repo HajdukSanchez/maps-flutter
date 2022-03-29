@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maps_app/models/search.dart';
+import 'package:maps_app/models/models.dart';
 
 class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   // Here we can change the initial configuration of the delegate
