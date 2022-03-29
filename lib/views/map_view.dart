@@ -37,6 +37,7 @@ class MapView extends StatelessWidget {
           polylines: polylines,
           onMapCreated: (GoogleMapController controller) {
             mapBloc.add(OnMapInitializedEvent(controller));
+            mapBloc.mapCenterLocation = LatLng(initialLocation.latitude, initialLocation.longitude);
           },
           onCameraMove: (position) => mapBloc.mapCenterLocation = position.target,
         ),
