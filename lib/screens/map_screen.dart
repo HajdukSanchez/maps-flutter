@@ -53,7 +53,8 @@ class _MapScreenState extends State<MapScreen> {
                   MapView(
                       initialLocation: locationState.lastKnownPosition!,
                       polylines: polylines.values.toSet()),
-                  const SearchBar()
+                  const SearchBar(),
+                  const ManualMarker()
                 ],
               ),
             );
