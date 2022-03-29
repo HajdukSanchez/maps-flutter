@@ -12,8 +12,8 @@ void main() {
       BlocProvider(create: (context) => GpsBloc()),
       BlocProvider(create: (context) => LocationBloc()),
       BlocProvider(
-          create: (context) =>
-              MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
+          create: (context) => MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
+      BlocProvider(create: (context) => SearchBloc()),
     ],
     child: const MyApp(),
   ));
