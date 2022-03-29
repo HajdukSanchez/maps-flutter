@@ -13,13 +13,54 @@ class ManualMarker extends StatelessWidget {
       height: size.height,
       child: Stack(
         children: [
+          const Positioned(top: 50, left: 20, child: _ButtonBack()),
           Center(
               child: Transform.translate(
                   offset: const Offset(0, -20),
                   child: BounceInDown(
                       from: 150, child: const Icon(Icons.location_on_rounded, size: 50)))),
+          Positioned(
+              bottom: 25,
+              left: 20,
+              child: FadeInUp(
+                duration: const Duration(milliseconds: 300),
+                child: MaterialButton(
+                  onPressed: () {},
+                  minWidth: size.width - 100,
+                  child: const Text(
+                    'Confirm Location',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+                  ),
+                  color: Colors.black,
+                  elevation: 0,
+                  height: 50,
+                  shape: const StadiumBorder(),
+                ),
+              ))
         ],
       ),
+    );
+  }
+}
+
+class _ButtonBack extends StatelessWidget {
+  const _ButtonBack({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeInLeft(
+      duration: const Duration(milliseconds: 300),
+      child: CircleAvatar(
+          maxRadius: 25,
+          backgroundColor: Colors.white,
+          child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+              ))),
     );
   }
 }
