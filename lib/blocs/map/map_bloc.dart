@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
 import 'package:maps_app/enums/enums.dart';
+import 'package:maps_app/models/models.dart';
 import 'package:maps_app/themes/themes.dart';
 
 part 'map_event.dart';
@@ -25,6 +26,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<ToggleShowMyRouteEvent>(_toggleShowMyRoute);
     on<OnMapStartFollowingUserEvent>(_startFollowingUser);
     on<OnMapStopFollowingUserEvent>((event, emit) => emit(state.copyWith(isFollowingUser: false)));
+    on<DisplayPolylinesEvent>((event, emit) => emit(state.copyWith(polylines: event.polylines)));
     _startTrackingUser();
   }
 
@@ -74,6 +76,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _toggleShowMyRoute(ToggleShowMyRouteEvent event, Emitter<MapState> emit) {
     emit(state.copyWith(showMyRoute: !state.showMyRoute));
+  }
+
+  Future drawRoutePolyline(RouteDestination destination) async {
+    final myRoute = Polyline(
+      polylineId: PolylineId(PolylineEnum.manualRoute.name),
+      color: Colors.black,
+      width: 5,
+      points: destination.points,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+    );
+    final currentPolylines = Map<String, Polyline>.from(state.polylines);
+    currentPolylines[PolylineEnum.manualRoute.name] = myRoute;
+    add(DisplayPolylinesEvent(currentPolylines));
   }
 
   @override

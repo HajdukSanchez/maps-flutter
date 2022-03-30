@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
+import 'package:maps_app/helpers/helpers.dart';
 
 class ManualMarker extends StatelessWidget {
   const ManualMarker({Key? key}) : super(key: key);
@@ -74,7 +75,11 @@ class _ButtonConfirmLocation extends StatelessWidget {
     final LatLng? start = BlocProvider.of<LocationBloc>(context).state.lastKnownPosition;
     final LatLng? end = BlocProvider.of<MapBloc>(context).mapCenterLocation;
     if (start == null || end == null) return;
-    await BlocProvider.of<SearchBloc>(context).getCoorsStartToEnd(start, end);
+    showLoadingMessage(context); // Loading message
+    final destination = await BlocProvider.of<SearchBloc>(context).getCoorsStartToEnd(start, end);
+    await BlocProvider.of<MapBloc>(context).drawRoutePolyline(destination);
+    BlocProvider.of<SearchBloc>(context).add(OnDisactivateManualMarkerEvent());
+    Navigator.pop(context); // Close loading message
   }
 }
 

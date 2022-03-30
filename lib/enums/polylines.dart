@@ -1,3 +1,1 @@
-enum PolylineEnum {
-  myRoute,
-}
+enum PolylineEnum { myRoute, manualRoute }
