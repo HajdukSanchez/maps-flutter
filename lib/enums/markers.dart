@@ -1,1 +1,1 @@
-enum MarkerEnum { startMarker }
+enum MarkerEnum { startMarker, finalMarker }

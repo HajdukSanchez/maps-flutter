@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
 import 'package:maps_app/enums/enums.dart';
+import 'package:maps_app/helpers/helpers.dart';
 import 'package:maps_app/models/models.dart';
 import 'package:maps_app/themes/themes.dart';
 
@@ -62,16 +63,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _onPolylineNewPoint(UpdateUserPolylineEvent event, Emitter<MapState> emit) {
-    final myRoute = Polyline(
-        width: 5,
-        polylineId: PolylineId(PolylineEnum.myRoute.name),
-        color: Colors.black,
-        startCap: Cap.roundCap,
-        endCap: Cap.roundCap);
+    final myRoute = createPolyline(id: PolylineEnum.myRoute.name);
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines[PolylineEnum.myRoute.name] =
         myRoute; // We create a copy because maybe we are going to re do this event
+
     emit(state.copyWith(polylines: currentPolylines));
   }
 
@@ -80,25 +77,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Future drawRoutePolyline(RouteDestination destination) async {
-    final myRoute = Polyline(
-      polylineId: PolylineId(PolylineEnum.manualRoute.name),
-      color: Colors.black,
-      width: 5,
-      points: destination.points,
-      startCap: Cap.roundCap,
-      endCap: Cap.roundCap,
-    );
-
-    final startMarker = Marker(
-      markerId: MarkerId(MarkerEnum.startMarker.name),
-      position: destination.points.first, // Marker in the start point of our polyline
-    );
+    final myRoute = createPolyline(id: PolylineEnum.manualRoute.name, points: destination.points);
+    final startMarker = createMarker(MarkerEnum.startMarker.name, destination.points.first);
+    final finalMarker = createMarker(MarkerEnum.finalMarker.name, destination.points.last);
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines[PolylineEnum.manualRoute.name] = myRoute;
 
     final currentMarkers = Map<String, Marker>.from(state.markers);
     currentMarkers[MarkerEnum.startMarker.name] = startMarker;
+    currentMarkers[MarkerEnum.finalMarker.name] = finalMarker;
 
     add(DisplayPolylinesEvent(currentPolylines, currentMarkers));
   }

@@ -41,6 +41,7 @@ class MapView extends StatelessWidget {
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
           polylines: polylines,
+          markers: markers,
           onMapCreated: (GoogleMapController controller) {
             mapBloc.add(OnMapInitializedEvent(controller));
             mapBloc.mapCenterLocation = LatLng(initialLocation.latitude, initialLocation.longitude);
