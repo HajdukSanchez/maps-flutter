@@ -26,7 +26,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<ToggleShowMyRouteEvent>(_toggleShowMyRoute);
     on<OnMapStartFollowingUserEvent>(_startFollowingUser);
     on<OnMapStopFollowingUserEvent>((event, emit) => emit(state.copyWith(isFollowingUser: false)));
-    on<DisplayPolylinesEvent>((event, emit) => emit(state.copyWith(polylines: event.polylines)));
+    on<DisplayPolylinesEvent>(
+        (event, emit) => emit(state.copyWith(polylines: event.polylines, markers: event.markers)));
     _startTrackingUser();
   }
 
@@ -87,9 +88,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
     );
+
+    final startMarker = Marker(
+      markerId: MarkerId(MarkerEnum.startMarker.name),
+      position: destination.points.first, // Marker in the start point of our polyline
+    );
+
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines[PolylineEnum.manualRoute.name] = myRoute;
-    add(DisplayPolylinesEvent(currentPolylines));
+
+    final currentMarkers = Map<String, Marker>.from(state.markers);
+    currentMarkers[MarkerEnum.startMarker.name] = startMarker;
+
+    add(DisplayPolylinesEvent(currentPolylines, currentMarkers));
   }
 
   @override

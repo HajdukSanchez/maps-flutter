@@ -9,8 +9,14 @@ class MapView extends StatelessWidget {
   final LatLng initialLocation;
   final double zoom;
   final Set<Polyline> polylines;
+  final Set<Marker> markers;
 
-  const MapView({Key? key, required this.initialLocation, required this.polylines, this.zoom = 15})
+  const MapView(
+      {Key? key,
+      required this.initialLocation,
+      required this.polylines,
+      required this.markers,
+      this.zoom = 15})
       : super(key: key);
 
   @override
