@@ -32,7 +32,7 @@ class TrafficService {
     final Response response = await _dioPlaces.get(url, queryParameters: {
       'proximity': '${proximity.longitude},${proximity.latitude}',
     });
-    final placesResponse = PlacesResponse.fromJson(response.data);
+    final placesResponse = PlacesResponse.fromMap(response.data);
     return placesResponse.features;
   }
 }

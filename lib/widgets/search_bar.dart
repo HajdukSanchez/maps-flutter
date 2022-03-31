@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
 import 'package:maps_app/models/models.dart';
@@ -61,9 +62,16 @@ class _SearchBarBody extends StatelessWidget {
     );
   }
 
-  void onSearchResults(BuildContext context, SearchResult result) {
+  void onSearchResults(BuildContext context, SearchResult result) async {
     if (result.manual) {
       BlocProvider.of<SearchBloc>(context).add(OnActivateManualMarkerEvent());
+    } else if (result.userSerachSelected != null) {
+      final start = BlocProvider.of<LocationBloc>(context).state.lastKnownPosition;
+      final end =
+          LatLng(result.userSerachSelected!.center.last, result.userSerachSelected!.center.first);
+      final destination =
+          await BlocProvider.of<SearchBloc>(context).getCoorsStartToEnd(start!, end);
+      await BlocProvider.of<MapBloc>(context).drawRoutePolyline(destination);
     }
   }
 }

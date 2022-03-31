@@ -37,7 +37,6 @@ class Feature {
     required this.id,
     required this.type,
     required this.placeType,
-    required this.relevance,
     required this.properties,
     required this.textEs,
     required this.placeNameEs,
@@ -46,14 +45,11 @@ class Feature {
     required this.center,
     required this.geometry,
     required this.context,
-    required this.languageEs,
-    required this.language,
   });
 
   final String id;
   final FeatureType? type;
   final List<PlaceType> placeType;
-  final int relevance;
   final Properties properties;
   final String textEs;
   final String placeNameEs;
@@ -62,8 +58,6 @@ class Feature {
   final List<double> center;
   final Geometry geometry;
   final List<Context> context;
-  final Language? languageEs;
-  final Language? language;
 
   factory Feature.fromJson(String str) => Feature.fromMap(json.decode(str));
 
@@ -73,7 +67,6 @@ class Feature {
         id: json["id"],
         type: featureTypeValues.map[json["type"]],
         placeType: List<PlaceType>.from(json["place_type"].map((x) => placeTypeValues.map[x])),
-        relevance: json["relevance"],
         properties: Properties.fromMap(json["properties"]),
         textEs: json["text_es"],
         placeNameEs: json["place_name_es"],
@@ -82,15 +75,12 @@ class Feature {
         center: List<double>.from(json["center"].map((x) => x.toDouble())),
         geometry: Geometry.fromMap(json["geometry"]),
         context: List<Context>.from(json["context"].map((x) => Context.fromMap(x))),
-        languageEs: json["language_es"] == null ? null : languageValues.map[json["language_es"]],
-        language: json["language"] == null ? null : languageValues.map[json["language"]],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "type": featureTypeValues.reverse[type],
         "place_type": List<dynamic>.from(placeType.map((x) => placeTypeValues.reverse[x])),
-        "relevance": relevance,
         "properties": properties.toMap(),
         "text_es": textEs,
         "place_name_es": placeNameEs,
@@ -99,8 +89,6 @@ class Feature {
         "center": List<dynamic>.from(center.map((x) => x)),
         "geometry": geometry.toMap(),
         "context": List<dynamic>.from(context.map((x) => x.toMap())),
-        "language_es": languageEs == null ? null : languageValues.reverse[languageEs],
-        "language": language == null ? null : languageValues.reverse[language],
       };
 }
 
@@ -111,8 +99,6 @@ class Context {
     required this.text,
     required this.shortCode,
     required this.wikidata,
-    required this.languageEs,
-    required this.language,
   });
 
   final Id? id;
@@ -120,8 +106,6 @@ class Context {
   final String text;
   final ShortCode? shortCode;
   final Wikidata? wikidata;
-  final Language? languageEs;
-  final Language? language;
 
   factory Context.fromJson(String str) => Context.fromMap(json.decode(str));
 
@@ -133,8 +117,6 @@ class Context {
         text: json["text"],
         shortCode: json["short_code"] == null ? null : shortCodeValues.map[json["short_code"]],
         wikidata: json["wikidata"] == null ? null : wikidataValues.map[json["wikidata"]],
-        languageEs: json["language_es"] == null ? null : languageValues.map[json["language_es"]],
-        language: json["language"] == null ? null : languageValues.map[json["language"]],
       );
 
   Map<String, dynamic> toMap() => {
@@ -143,8 +125,6 @@ class Context {
         "text": text,
         "short_code": shortCode == null ? null : shortCodeValues.reverse[shortCode],
         "wikidata": wikidata == null ? null : wikidataValues.reverse[wikidata],
-        "language_es": languageEs == null ? null : languageValues.reverse[languageEs],
-        "language": language == null ? null : languageValues.reverse[language],
       };
 }
 
@@ -161,10 +141,6 @@ final idValues = EnumValues({
   "postcode.587773031247480": Id.POSTCODE_587773031247480,
   "postcode.6418527313762310": Id.POSTCODE_6418527313762310
 });
-
-enum Language { ES }
-
-final languageValues = EnumValues({"es": Language.ES});
 
 enum ShortCode { CO_DC, CO }
 

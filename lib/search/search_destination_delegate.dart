@@ -51,7 +51,29 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
 
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return Text("Results");
+        final places = state.places;
+        return ListView.separated(
+          padding: const EdgeInsets.only(bottom: 30),
+          itemCount: places.length,
+          separatorBuilder: (BuildContext context, int index) => const Divider(height: 20),
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+                title: Text(
+                  places[index].text,
+                ),
+                subtitle: Text(places[index].placeName),
+                leading: const Icon(
+                  Icons.business_outlined,
+                  color: Colors.black,
+                ),
+                minLeadingWidth: 10,
+                onTap: () {
+                  final result =
+                      SearchResult(cancel: false, manual: false, userSerachSelected: places[index]);
+                  close(context, result);
+                });
+          },
+        );
       },
     );
   }
@@ -71,7 +93,9 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
             close(context, result);
           },
         ),
-        const Divider(),
+        const Divider(
+          height: 0,
+        ),
       ],
     );
   }
