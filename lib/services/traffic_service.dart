@@ -25,12 +25,14 @@ class TrafficService {
     return data;
   }
 
-  Future getResultsByQuery(String query, LatLng proximity) async {
+  Future<List<Feature>> getResultsByQuery(String query, LatLng proximity) async {
     if (query.isEmpty) return [];
     final String url = '$_basePlacesURL/$query.json';
     // Another way to add query parameters
     final Response response = await _dioPlaces.get(url, queryParameters: {
       'proximity': '${proximity.longitude},${proximity.latitude}',
     });
+    final placesResponse = PlacesResponse.fromJson(response.data);
+    return placesResponse.features;
   }
 }
