@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
 import 'package:maps_app/models/models.dart';
+import 'package:maps_app/widgets/widgets.dart';
 
 class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   // Here we can change the initial configuration of the delegate
@@ -49,6 +50,12 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
     final proximity = BlocProvider.of<LocationBloc>(context).state.lastKnownPosition;
     searchBloc.getPlacesByQuery(query, proximity!);
 
+    void _onTap(Feature place) {
+      final result = SearchResult(cancel: false, manual: false, userSerachSelected: place);
+      searchBloc.add(OnAddPlaceToHistoryEvent(place));
+      close(context, result);
+    }
+
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         final places = state.places;
@@ -57,21 +64,11 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
           itemCount: places.length,
           separatorBuilder: (BuildContext context, int index) => const Divider(height: 20),
           itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-                title: Text(
-                  places[index].text,
-                ),
-                subtitle: Text(places[index].placeName),
-                leading: const Icon(
-                  Icons.business_outlined,
-                  color: Colors.black,
-                ),
-                minLeadingWidth: 10,
-                onTap: () {
-                  final result =
-                      SearchResult(cancel: false, manual: false, userSerachSelected: places[index]);
-                  close(context, result);
-                });
+            return PlaceTile(
+              place: places[index],
+              icon: Icons.business_outlined,
+              onTap: () => _onTap(places[index]),
+            );
           },
         );
       },
@@ -80,6 +77,14 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+
+    void _onTap(Feature place) {
+      final result = SearchResult(cancel: false, manual: false, userSerachSelected: place);
+      BlocProvider.of<SearchBloc>(context).add(OnAddPlaceToHistoryEvent(place));
+      close(context, result);
+    }
+
     return ListView(
       children: [
         ListTile(
@@ -96,6 +101,8 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
         const Divider(
           height: 0,
         ),
+        ...searchBloc.state.history
+            .map((historyItem) => PlaceTile(place: historyItem, onTap: () => _onTap(historyItem))),
       ],
     );
   }

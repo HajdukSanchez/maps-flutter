@@ -16,6 +16,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<OnActivateManualMarkerEvent>(_onActivateManualMarker);
     on<OnDisactivateManualMarkerEvent>(_onDisactivateManualMarker);
     on<OnNewPlacesFoundEvent>(_onNewPlacesFound);
+    on<OnAddPlaceToHistoryEvent>(_onAddPlaceToHistory);
   }
 
   void _onActivateManualMarker(OnActivateManualMarkerEvent event, Emitter<SearchState> emit) {
@@ -28,6 +29,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   void _onNewPlacesFound(OnNewPlacesFoundEvent event, Emitter<SearchState> emit) {
     emit(state.copyWith(places: event.places));
+  }
+
+  void _onAddPlaceToHistory(OnAddPlaceToHistoryEvent event, Emitter<SearchState> emit) {
+    final places = state.history
+        .where((element) => element.id != event.place.id)
+        .toList(); // Remove the place if it is already in the history
+    emit(state.copyWith(history: [event.place, ...places]));
   }
 
   Future<RouteDestination> getCoorsStartToEnd(LatLng start, LatLng end) async {
