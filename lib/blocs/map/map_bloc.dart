@@ -78,8 +78,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   Future drawRoutePolyline(RouteDestination destination) async {
     final myRoute = createPolyline(id: PolylineEnum.manualRoute.name, points: destination.points);
-    final startMarker = createMarker(MarkerEnum.startMarker.name, destination.points.first);
-    final finalMarker = createMarker(MarkerEnum.finalMarker.name, destination.points.last);
+    final startMarker =
+        createMarker(id: MarkerEnum.startMarker.name, location: destination.points.first);
+    final finalMarker = createMarker(
+      id: MarkerEnum.finalMarker.name,
+      location: destination.points.last,
+      information: const InfoWindow(title: "Info window", snippet: "This is the information"),
+    );
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines[PolylineEnum.manualRoute.name] = myRoute;
@@ -89,6 +94,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentMarkers[MarkerEnum.finalMarker.name] = finalMarker;
 
     add(DisplayPolylinesEvent(currentPolylines, currentMarkers));
+    await Future.delayed(const Duration(milliseconds: 300), () {
+      _mapController?.showMarkerInfoWindow(MarkerId(MarkerEnum.finalMarker.name));
+    }); // To open the info window by default
   }
 
   @override
