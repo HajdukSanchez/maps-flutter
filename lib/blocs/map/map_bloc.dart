@@ -79,15 +79,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Future drawRoutePolyline(RouteDestination destination) async {
     final minutes = destination.duration.toInt() ~/ 60;
 
+    final iconMarker = await getAssetImageMarker();
     final myRoute = createPolyline(id: PolylineEnum.manualRoute.name, points: destination.points);
-    final startMarker =
-        createMarker(id: MarkerEnum.startMarker.name, location: destination.points.first);
+    final startMarker = createMarker(
+        id: MarkerEnum.startMarker.name,
+        location: destination.points.first,
+        iconImage: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed));
     final finalMarker = createMarker(
-      id: MarkerEnum.finalMarker.name,
-      location: destination.points.last,
-      information:
-          InfoWindow(title: "$minutes MIN", snippet: destination.destinationInformation.text),
-    );
+        id: MarkerEnum.finalMarker.name,
+        location: destination.points.last,
+        information:
+            InfoWindow(title: "$minutes MIN", snippet: destination.destinationInformation.text),
+        iconImage: iconMarker);
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines[PolylineEnum.manualRoute.name] = myRoute;
