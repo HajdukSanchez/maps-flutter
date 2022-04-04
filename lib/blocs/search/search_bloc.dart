@@ -42,12 +42,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final TrafficResponse response = await trafficService.getCoorsStartToEnd(start, end);
     final distance = response.routes[0].distance;
     final duration = response.routes[0].duration;
+    final destinationInfo =
+        await trafficService.getInformationByCoors(end); // Get the information of the destination
+
     // Decode geometry
     // The accuracyExponent is the number of decimals after the comma.
     final points = decodePolyline(response.routes[0].geometry, accuracyExponent: 6);
     final pointsList =
         points.map((coor) => LatLng(coor[0].toDouble(), coor[1].toDouble())).toList();
-    return RouteDestination(points: pointsList, duration: duration, distance: distance);
+    return RouteDestination(
+        points: pointsList,
+        duration: duration,
+        distance: distance,
+        destinationInformation: destinationInfo);
   }
 
   Future getPlacesByQuery(

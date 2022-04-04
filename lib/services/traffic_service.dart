@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:maps_app/models/models.dart';
 
+import 'package:maps_app/models/models.dart';
 import 'package:maps_app/services/services.dart';
 
 class TrafficService {
@@ -31,8 +31,18 @@ class TrafficService {
     // Another way to add query parameters
     final Response response = await _dioPlaces.get(url, queryParameters: {
       'proximity': '${proximity.longitude},${proximity.latitude}',
+      'limit': 10,
     });
     final placesResponse = PlacesResponse.fromMap(response.data);
     return placesResponse.features;
+  }
+
+  Future<Feature> getInformationByCoors(LatLng coors) async {
+    final String url = "$_basePlacesURL/${coors.longitude},${coors.latitude}.json";
+    final Response response = await _dioPlaces.get(url, queryParameters: {
+      'limit': 1 // Only get the most relevant result
+    });
+    final placesResponse = PlacesResponse.fromMap(response.data);
+    return placesResponse.features.first;
   }
 }

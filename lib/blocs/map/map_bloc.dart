@@ -77,13 +77,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Future drawRoutePolyline(RouteDestination destination) async {
+    final minutes = destination.duration.toInt() ~/ 60;
+
     final myRoute = createPolyline(id: PolylineEnum.manualRoute.name, points: destination.points);
     final startMarker =
         createMarker(id: MarkerEnum.startMarker.name, location: destination.points.first);
     final finalMarker = createMarker(
       id: MarkerEnum.finalMarker.name,
       location: destination.points.last,
-      information: const InfoWindow(title: "Info window", snippet: "This is the information"),
+      information:
+          InfoWindow(title: "$minutes MIN", snippet: destination.destinationInformation.text),
     );
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);

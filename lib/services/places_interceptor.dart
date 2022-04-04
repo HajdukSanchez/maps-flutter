@@ -5,7 +5,7 @@ class PlacesInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.queryParameters
-        .addAll({'limit': 10, 'language': 'es', 'access_token': dotenv.env['ROUTES_API_KEY']});
+        .addAll({'language': 'es', 'access_token': dotenv.env['ROUTES_API_KEY']});
     super.onRequest(options, handler);
   }
 }
