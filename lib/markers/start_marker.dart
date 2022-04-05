@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class StartMarkerPainter extends CustomPainter {
+class EndMarkerPainter extends CustomPainter {
   final String minutes;
   final String description;
 
-  StartMarkerPainter({required this.minutes, required this.description});
+  EndMarkerPainter({required this.minutes, required this.description});
 
   @override
   void paint(Canvas canvas, Size size) {

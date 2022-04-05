@@ -5,13 +5,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:maps_app/markers/markers.dart';
 
-Future<BitmapDescriptor> getStartCustomMarker(int duration, String description) async {
-  return await _createCustomMarker(
-      StartMarkerPainter(minutes: duration.toString(), description: description));
+Future<BitmapDescriptor> getStartCustomMarker(String description) async {
+  return await _createCustomMarker(StartMarkerPainter(description: description));
 }
 
-Future<BitmapDescriptor> getEndCustomMarker(String description) async {
-  return await _createCustomMarker(EndMarkerPainter(description: description));
+Future<BitmapDescriptor> getEndCustomMarker(int duration, String description) async {
+  return await _createCustomMarker(
+      EndMarkerPainter(minutes: duration.toString(), description: description));
 }
 
 Future<BitmapDescriptor> _createCustomMarker(CustomPainter marker) async {

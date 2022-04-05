@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class EndMarkerPainter extends CustomPainter {
+class StartMarkerPainter extends CustomPainter {
   final String description;
 
-  EndMarkerPainter({required this.description});
+  StartMarkerPainter({required this.description});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -40,7 +40,7 @@ class EndMarkerPainter extends CustomPainter {
         maxLines: 2,
         ellipsis: "...",
         textDirection: TextDirection.ltr,
-        textAlign: TextAlign.left)
+        textAlign: TextAlign.center)
       ..layout(minWidth: size.width - 90, maxWidth: size.width - 90);
 
     final double locationOffsetY = description.length > 20 ? 35 : 48;

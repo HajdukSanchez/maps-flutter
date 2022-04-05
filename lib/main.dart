@@ -32,10 +32,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Maps App',
-      home: Scaffold(
-          body:
-              //  LoadingScreen()
-              TestMarkerScreen()),
+      home: Scaffold(body: LoadingScreen()),
     );
   }
 }
