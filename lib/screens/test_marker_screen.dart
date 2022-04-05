@@ -14,7 +14,10 @@ class TestMarkerScreen extends StatelessWidget {
         width: 350,
         height: 150,
         child: CustomPaint(
-          painter: StartMarkerPainter(description: "My house", minutes: "10"),
+          painter: EndMarkerPainter(
+            description: "My house",
+          ),
+          // painter: StartMarkerPainter(description: "My house", minutes: "10"),
         ),
       ),
     ));
